@@ -2,7 +2,7 @@
 
 namespace frontend\controllers;
 
-use yeesoft\post\models\Post;
+use backend\models\CustomPost;
 use Yii;
 use yeesoft\post\models\Category;
 use yii\data\Pagination;
@@ -32,8 +32,8 @@ class CategoryController extends \yeesoft\controllers\BaseController
             }
         }
 
-        $query = Post::find()->joinWith('category')->where([
-            'status' => Post::STATUS_PUBLISHED,
+        $query = CustomPost::find()->joinWith('category')->where([
+            'status' => CustomPost::STATUS_PUBLISHED,
             Category::tableName() . '.slug' => $slug,
         ])->orderBy('published_at DESC');
         $countQuery = clone $query;

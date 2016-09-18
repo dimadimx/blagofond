@@ -16,10 +16,10 @@ return [
     ],
     'components' => [
         'view' => [
-            'theme' => [
-                'class' => 'frontend\components\Theme',
-                'theme' => 'readable', //cerulean, cosmo, default, flatly, readable, simplex, united
-            ],
+//            'theme' => [
+//                'class' => 'frontend\components\Theme',
+//                'theme' => 'blagofond', //cerulean, cosmo, default, flatly, readable, simplex, united
+//            ],
             'as seo' => [
                 'class' => 'yeesoft\seo\components\SeoViewBehavior',
             ]

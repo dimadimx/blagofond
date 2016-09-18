@@ -5,8 +5,9 @@ namespace frontend\controllers;
 use frontend\actions\PageAction;
 use frontend\actions\PostAction;
 use frontend\models\ContactForm;
+use frontend\models\HomeSlide;
+use backend\models\CustomPost;
 use yeesoft\page\models\Page;
-use yeesoft\post\models\Post;
 use Yii;
 use yii\data\Pagination;
 
@@ -43,21 +44,29 @@ class SiteController extends \yeesoft\controllers\BaseController
         // display home page
         if (empty($slug) || $slug == 'index') {
 
-            $query = Post::find()->where(['status' => Post::STATUS_PUBLISHED]);
-            $countQuery = clone $query;
+            $slideModel = new HomeSlide();
+            $slide = $slideModel->search(['slug' => 'slide']);
 
-            $pagination = new Pagination([
-                'totalCount' => $countQuery->count(),
-                'defaultPageSize' => Yii::$app->settings->get('reading.page_size', 10),
-            ]);
+            $query = CustomPost::find()
+                        ->where(['status' => CustomPost::STATUS_PUBLISHED])
+                        ->andWhere(['view' => 'post'])
+                        ->joinWith('volunteer');
 
-            $posts = $query->orderBy('published_at DESC')->offset($pagination->offset)
-                ->limit($pagination->limit)
+//            $countQuery = clone $query;
+//
+//            $pagination = new Pagination([
+//                'totalCount' => $countQuery->count(),
+//                'defaultPageSize' => Yii::$app->settings->get('reading.page_size', 10),
+//            ]);
+
+            $postsDesc = $query->orderBy('published_at DESC')
+                ->limit(Yii::$app->settings->get('reading.page_size', 8))
                 ->all();
 
             return $this->render('index', [
-                'posts' => $posts,
-                'pagination' => $pagination,
+                'posts' => $postsDesc,
+//                'pagination' => $pagination,
+                'slide' => $slide,
             ]);
         }
 
@@ -85,8 +94,8 @@ class SiteController extends \yeesoft\controllers\BaseController
         }
 
         //try to display post from datebase
-        $post = Post::getDb()->cache(function ($db) use ($slug) {
-            return Post::findOne(['slug' => $slug, 'status' => Post::STATUS_PUBLISHED]);
+        $post = CustomPost::getDb()->cache(function ($db) use ($slug) {
+            return CustomPost::findOne(['slug' => $slug, 'status' => CustomPost::STATUS_PUBLISHED]);
         }, 3600);
 
         if ($post) {

@@ -38,7 +38,9 @@
     "yeesoft/yii2-yee-seo": "*",
     "yeesoft/yii2-comments": "*",
     "yeesoft/yii2-yee-comment": "*",
-    "yeesoft/yee-i18n": "*"
+    "yeesoft/yee-i18n": "*",
+    "2amigos/yii2-transliterator-helper": "*",
+    "kartik-v/yii2-widget-fileinput": "@dev"
   },
   "require-dev": {
     "yiisoft/yii2-codeception": "*",

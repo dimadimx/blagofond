@@ -32,6 +32,7 @@ return [
                 'basePath' => '@frontend/web', // Base web directory url
                 'uploadPath' => 'uploads', // Path for uploaded files in web directory
             ],
+            'rename' => true,
         ],
         'post' => [
             'class' => 'yeesoft\post\PostModule',
@@ -49,6 +50,9 @@ return [
     'components' => [
         'request' => [
             'baseUrl' => '/admin',
+        ],
+        'user' => [
+            'loginUrl' => ['/uk/auth/login'],
         ],
         'assetManager' => [
             'bundles' => [
@@ -69,6 +73,12 @@ return [
                 '<controller:(test)>/<id:\d+>' => '<controller>/view',
                 '<controller:(test)>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 '<controller:(test)>/<action:\w+>' => '<controller>/<action>',
+
+                // custom route
+                '<module:(custom-post)>/<action:\w+>/<id:\d+>' => '<module>/<action>',
+                '<module:(post)>/<action:(update|delete)>/<id:\d+>' => 'custom-post/<action>',
+                '<module:(post)>/<action:(create)>' => 'custom-post/<action>',
+
                 //yee cms and other modules routes
                 '<module:\w+>/' => '<module>/default/index',
                 '<module:\w+>/<action:\w+>/<id:\d+>' => '<module>/default/<action>',

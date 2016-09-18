@@ -13,7 +13,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?php /* @var $post yeesoft\post\models\Post */ ?>
         <?php foreach ($posts as $post) : ?>
-            <?= $this->render('/items/post.php', ['post' => $post, 'page' => 'category']) ?>
+
+            <?php if ($category->slug == 'news') { ?>
+                <?= $this->render('/items/news.php', ['post' => $post, 'page' => 'category']) ?>
+            <?php } else { ?>
+                <?= $this->render('/items/post.php', ['post' => $post, 'page' => 'category']) ?>
+            <?php } ?>
+
         <?php endforeach; ?>
 
         <div class="text-center">
