@@ -4,6 +4,8 @@ Options -Indexes
 #Options FollowSymlinks
 RewriteEngine on
 
+RewriteRule ^git-pull.php  - [NC,L]
+
 RewriteCond %{REQUEST_URI} ^/admin/$
 RewriteRule ^(admin)/$ /$1 [R=301,L]
 RewriteCond %{REQUEST_URI} ^/admin
