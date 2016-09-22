@@ -1,7 +1,7 @@
 # prevent directory listings
 Options -Indexes
 # follow symbolic links
-Options FollowSymlinks
+#Options FollowSymlinks
 RewriteEngine on
 
 RewriteCond %{REQUEST_URI} ^/admin/$
