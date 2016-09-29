@@ -1,6 +1,7 @@
 <?php
 
 use yii\widgets\LinkPager;
+use \yii\helpers\Url;
 
 /* @var $this yii\web\View */
 
@@ -12,7 +13,7 @@ $this->title = 'Homepage';
         <div class="row">
             <div class="col-xs-12">
                 <h1><?php echo $slide['description'] ?></h1>
-                <a href="#" class="btn2 bg-red"><?php echo Yii::t('yee/site', 'Helping children') ?></a>
+                <a href="<?php echo Url::to(['almost-finish-company'])?>" class="btn2 bg-red"><?php echo Yii::t('yee/site', 'Helping children') ?></a>
             </div>
         </div>
     </div>
@@ -41,7 +42,7 @@ $this->title = 'Homepage';
                 </div>
                 <div class="row">
                     <div class="col-xs-12 text-center allList">
-                        <a href="#" class="btn2 bg-red">ВЕСЬ СПИСОК</a>
+                        <a href="<?php echo Url::to(['almost-finish-company'])?>" class="btn2 bg-red">ВЕСЬ СПИСОК</a>
                     </div>
                 </div>
             </div>
@@ -67,7 +68,7 @@ $this->title = 'Homepage';
                 </div>
                 <div class="row">
                     <div class="col-xs-12 text-center allList">
-                        <a href="#" class="btn2 bg-red">ВЕСЬ СПИСОК</a>
+                        <a href="<?php echo Url::to(['new-company'])?>" class="btn2 bg-red">ВЕСЬ СПИСОК</a>
                     </div>
                 </div>
             </div>

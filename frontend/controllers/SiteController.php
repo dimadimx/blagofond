@@ -145,4 +145,54 @@ class SiteController extends \yeesoft\controllers\BaseController
     {
         return $this->render('about');
     }
+
+    public function actionNewCompany()
+    {
+        $query = CustomPost::find()
+            ->where(['status' => CustomPost::STATUS_PUBLISHED])
+            ->andWhere(['view' => 'post'])
+            ->joinWith('volunteer')
+            ->orderBy('published_at DESC');
+        $countQuery = clone $query;
+
+        $pagination = new Pagination([
+            'totalCount' => $countQuery->count(),
+            'defaultPageSize' => Yii::$app->settings->get('reading.page_size', 8),
+        ]);
+
+        $posts = $query->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+
+        return $this->render('company', [
+            'title' => 'Нещодавно створенні кампанії',
+            'posts' => $posts,
+            'pagination' => $pagination,
+        ]);
+    }
+
+    public function actionAlmostFinishCompany()
+    {
+        $query = CustomPost::find()
+            ->where(['status' => CustomPost::STATUS_PUBLISHED])
+            ->andWhere(['view' => 'post'])
+            ->joinWith('volunteer')
+            ->orderBy('published_at ASC');
+        $countQuery = clone $query;
+
+        $pagination = new Pagination([
+            'totalCount' => $countQuery->count(),
+            'defaultPageSize' => Yii::$app->settings->get('reading.page_size', 8),
+        ]);
+
+        $posts = $query->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+
+        return $this->render('company', [
+            'title' => 'Кампанії, які майже заповнились',
+            'posts' => $posts,
+            'pagination' => $pagination,
+        ]);
+    }
 }
