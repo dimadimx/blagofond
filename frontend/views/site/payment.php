@@ -1,9 +1,10 @@
 <?php
 
-use \voskobovich\liqpay\widgets\PaymentWidget;
+//use \voskobovich\liqpay\widgets\PaymentWidget;
+use frontend\components\LiqpayWidget;
 use yii\helpers\Url;
 
-echo PaymentWidget::widget([
+echo LiqpayWidget::widget([
     'data' => [
         'amount' => $amount,
         'currency' => $currency,
