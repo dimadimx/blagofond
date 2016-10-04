@@ -25,7 +25,7 @@ class SiteController extends \yeesoft\controllers\BaseController
      */
     public function beforeAction($action)
     {
-        if (Yii::$app->request->get('slug') == 'thanks') {
+        if (Yii::$app->request->get('slug') == 'thanks' or Yii::$app->request->get('slug') == 'callback') {
             $this->enableCsrfValidation = false;
         }
 
