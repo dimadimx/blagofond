@@ -54,7 +54,7 @@ $(document).ready(function(){
         $("#thumbnails > div").css("width",thumbsWidth);
         
         if($("#thumbnails img").length > 4){
-            if($("prevThumbs").length < 1){
+            if($("#prevThumbs").length < 1){
                 $("#thumbnails").append("<a id='prevThumbs' />");
                 $("#thumbnails").append("<a id='nextThumbs' />");
                 $("#thumbnails").addClass("arrows");
@@ -95,4 +95,10 @@ $(document).ready(function(){
             thm();
         });
     }
+
+    $(".alert-crud").fadeTo(2000, 500).slideUp(500);
+
+    $(".container").on("click", ".alert .close", function () {
+        $(".alert-crud").slideUp();
+    });
 });

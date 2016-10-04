@@ -15,14 +15,16 @@ $page = (isset($page)) ? $page : 'post';
             <span><?php echo $post->title ?></span>
         </a>
        <p><?= ($page === 'post') ? $post->content : $post->shortContent ?></p>
-        <form>
-            <input type="text" value="100" />
+        <form class="donate" method="post" action="<?= Url::toRoute("/site/send-payment") ?>">
+            <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken()?>" />
+            <input type="hidden" name="order_id" value="<?php echo $post->id?>" />
+            <input type="text" name="amount" value="100" />
             <input type="submit" value="Надіслати" class="btn2 bg-green" />
         </form>
         <div class="progressBlock">
             <div class="procent">88%</div>
             <div class="moneyStage">
-                <span class="moneyGet">22000</span>
+                <span class="moneyGet">50</span>
                 <span class="moneyGoal"><?php echo $post->volunteer->price ?></span>
             </div>
         </div>

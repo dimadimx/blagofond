@@ -40,7 +40,9 @@
     "yeesoft/yii2-yee-comment": "*",
     "yeesoft/yee-i18n": "*",
     "2amigos/yii2-transliterator-helper": "*",
-    "kartik-v/yii2-widget-fileinput": "@dev"
+    "kartik-v/yii2-widget-fileinput": "@dev",
+    "voskobovich/yii2-liqpay": "*",
+    "pistol88/yii2-liqpay": "*"
   },
   "require-dev": {
     "yiisoft/yii2-codeception": "*",

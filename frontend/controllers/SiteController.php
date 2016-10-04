@@ -11,12 +11,26 @@ use yeesoft\page\models\Page;
 use Yii;
 use yii\data\Pagination;
 
+use yii\base\InvalidParamException;
+use yii\web\BadRequestHttpException;
 /**
  * Site controller
  */
 class SiteController extends \yeesoft\controllers\BaseController
 {
     public $freeAccess = true;
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeAction($action)
+    {
+        if (Yii::$app->request->get('slug') == 'thanks') {
+            $this->enableCsrfValidation = false;
+        }
+
+        return parent::beforeAction($action);
+    }
 
     /**
      * @inheritdoc
@@ -31,6 +45,10 @@ class SiteController extends \yeesoft\controllers\BaseController
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
+            'result' => [
+                'class' => 'voskobovich\liqpay\actions\CallbackAction',
+                'callable' => 'payment',
+            ]
         ];
     }
 
@@ -194,5 +212,93 @@ class SiteController extends \yeesoft\controllers\BaseController
             'posts' => $posts,
             'pagination' => $pagination,
         ]);
+    }
+
+    /**
+     * @return Action
+     */
+    public function actionSendPayment()
+    {
+        $request = Yii::$app->request;
+        $product_url = 'index';
+        $this->layout = false;
+        if ($request->post('amount') and $request->post('order_id')) {
+            $donatePost = CustomPost::findOne(['id' => $request->post('order_id'), 'status' => CustomPost::STATUS_PUBLISHED]);
+
+            if ($donatePost) {
+                $product_url = $donatePost->slug;
+                return $this->render('payment', [
+                    'amount' => $request->post('amount'),
+                    'order_id' => $request->post('order_id').'_'.strtotime('now'),
+                    'currency' => 'UAH',
+                    'type' => 'donate',
+                    'language' => Yii::$app->yee->getDisplayLanguageShortcode(Yii::$app->language),
+                    'description' => $donatePost->title,
+                    'product_url' => $donatePost->slug,
+                    'server_url' => 'callback',
+                    'result_url' => 'thanks',
+                ]);
+            }
+        }
+
+        $this->redirect($product_url);
+    }
+
+    /**
+     * @return Action
+     */
+    function actionPayment($model)
+    {
+//        $orderModel = yii::$app->orderModel;
+//        $orderModel = $orderModel::findOne($model->order_id);
+//        if(!$orderModel) {
+//            throw new NotFoundHttpException('The requested order does not exist.');
+//        }
+//        $orderModel->setPaymentStatus('yes');
+//        $orderModel->save(false);
+        Yii::info('yes', 'dimx');
+        return 'YES';
+    }
+
+    /**
+     * @return Action
+     */
+    public function actionCallback()
+    {
+        $post = Yii::$app->request->post();
+        Yii::info($post, 'dimx');
+
+        if (empty($post['data']) || empty($post['signature'])) {
+            throw new BadRequestHttpException();
+        }
+
+        $liqPay = Yii::$app->get('liqpay');
+        $sign = base64_encode(sha1($liqPay->private_key . $post['data'] . $liqPay->private_key, 1));
+
+        $model = new \voskobovich\liqpay\forms\CallbackForm();
+        $data = json_decode(base64_decode($post['data']), true);
+        $model->load($data, '');
+        if (!$model->validate() || $sign !== $post['signature']) {
+            throw new BadRequestHttpException('Data is corrupted');
+        }
+
+        call_user_func($this->callable, $model);
+    }
+
+    /**
+     * @return Action
+     */
+    public function actionThanks()
+    {
+        $request = Yii::$app->request;
+
+        if (empty($request->post('data')) || empty($request->post('signature'))) {
+            throw new BadRequestHttpException();
+        }
+
+        $callbackData = json_decode(base64_decode($request->post('data')), true);
+        Yii::$app->session->setFlash('apiMessage', 'Your payment is '.$callbackData['status']);
+
+        $this->redirect($callbackData['product_url']);
     }
 }

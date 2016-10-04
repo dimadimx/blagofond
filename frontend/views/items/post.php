@@ -12,6 +12,14 @@ $page = (isset($page)) ? $page : 'post';
     $volunteer = $post->volunteer;
     $images = $post->images;
 ?>
+<?php if (Yii::$app->session->hasFlash('apiMessage')): ?>
+    <div class="alert alert-success alert-dismissible alert-crud" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <?= Yii::$app->session->getFlash('apiMessage') ?>
+    </div>
+<?php endif; ?>
 <!--# detailed #-->
 <div class="detailed">
     <div class="container">
@@ -40,8 +48,10 @@ $page = (isset($page)) ? $page : 'post';
                         <p class="detailsDesc"><?= $post->shortContent ?></p>
 
                         <div class="clr">
-                            <form>
-                                <input type="text" value="100" />
+                            <form class="donate" method="post" action="<?= Url::toRoute("/site/send-payment") ?>">
+                                <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken()?>" />
+                                <input type="hidden" name="order_id" value="<?php echo $post->id?>" />
+                                <input type="text" name="amount" value="100" />
                                 <input type="submit" value="Надіслати" class="btn2 bg-green" />
                             </form>
                         </div>
@@ -50,7 +60,7 @@ $page = (isset($page)) ? $page : 'post';
                             <div class="progressWidth" style="width: 88%;"></div>
                             <div class="procent">88%</div>
                             <div class="moneyStage">
-                                <span class="moneyGet">22000</span>
+                                <span class="moneyGet">40</span>
                                 <span class="moneyGoal"><?= $volunteer->price ?></span>
                             </div>
                         </div>

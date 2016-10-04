@@ -27,6 +27,16 @@ return [
         'seo' => [
             'class' => 'yeesoft\seo\components\Seo',
         ],
+        'liqpay' => [
+            'class' => 'voskobovich\liqpay\LiqPay',
+            'public_key' => 'i79293560426',
+            'private_key' => '9z8g5ilyyXBjKjH3TaJItRZb1Pz3HivDF9WeVdXW',
+            'version' => 3,
+            'sandbox' => true,
+            'debug' => true,
+            'language' => 'ru',
+            'paymentName' => 'Оплата заказа',
+        ],
         'request' => [
             'baseUrl' => '',
         ],

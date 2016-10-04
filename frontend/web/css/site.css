@@ -182,7 +182,7 @@ h1{
     right: 0;
     top: 100%;
     background: #eee;
-    width: 80px;
+    min-width: 80px;
     padding: 10px;
     border-radius: 3px;
     display: none;
@@ -236,7 +236,8 @@ span[data-lang="en"]{
 
 .slogan{
     position: absolute;
-    left: 106px;
+    /*left: 106px;*/
+    left: 130px;
     top: 30px;
     line-height: 1.25;
     color: rgba(0,0,0,.58);
@@ -468,6 +469,7 @@ span[data-lang="en"]{
     font-weight: bold;
     font-size: 21px;
     display: block;
+    height: 169px;
     overflow: hidden;
 }
 
@@ -497,8 +499,9 @@ span[data-lang="en"]{
 }
 
 .campaignBlock > p{
-    padding: 10px;
+    margin: 10px;
     height: 77px;
+    overflow: hidden;
     line-height: 1.35;
     color: rgba(0,0,0,.58);
 }
@@ -780,6 +783,7 @@ span[data-lang="en"]{
     color: #6c6c6c;
     line-height: 1.3;
     height: 162px;
+    overflow: hidden;
 }
 
 .detailsProgress{
@@ -987,3 +991,6 @@ span[data-lang="en"]{
     margin-bottom: 15px;
 }
 /* end fixedButtonsContent */
+.auth-clients {
+    line-height: 24px;
+}
