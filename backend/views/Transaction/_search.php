@@ -19,11 +19,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'post_id') ?>
 
+    <?= $form->field($model, 'user_id') ?>
+
     <?= $form->field($model, 'order_id') ?>
 
     <?= $form->field($model, 'amount') ?>
 
-    <?= $form->field($model, 'currency') ?>
+    <?php // echo $form->field($model, 'currency') ?>
 
     <?php // echo $form->field($model, 'commission') ?>
 

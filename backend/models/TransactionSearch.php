@@ -18,7 +18,7 @@ class TransactionSearch extends Transaction
     public function rules()
     {
         return [
-            [['id', 'post_id', 'create_date'], 'integer'],
+            [['id', 'post_id', 'user_id', 'create_date'], 'integer'],
             [['order_id', 'currency', 'type', 'action', 'status', 'liqpay_data', 'server_data', 'ip'], 'safe'],
             [['amount', 'commission'], 'number'],
         ];
@@ -62,6 +62,7 @@ class TransactionSearch extends Transaction
         $query->andFilterWhere([
             'id' => $this->id,
             'post_id' => $this->post_id,
+            'user_id' => $this->user_id,
             'amount' => $this->amount,
             'commission' => $this->commission,
             'create_date' => $this->create_date,

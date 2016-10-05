@@ -231,6 +231,8 @@ class SiteController extends \yeesoft\controllers\BaseController
                     'currency' => 'UAH',
                     'create_date' => $date,
                 ];
+                if (!Yii::$app->user->isGuest)
+                    $loadData['user_id'] = Yii::$app->user->id;
                 if ($transactionModel->load($loadData) and $transactionModel->validate()) {
                     $transactionModel->save(false);
                     return $this->render('payment', [

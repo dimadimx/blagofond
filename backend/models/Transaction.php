@@ -9,6 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property integer $post_id
+ * @property integer $user_id
  * @property string $order_id
  * @property string $amount
  * @property string $currency
@@ -39,7 +40,7 @@ class Transaction extends \yii\db\ActiveRecord
         return [
             [['post_id', 'order_id', 'amount', 'currency'], 'required'],
             [['commission', 'type', 'action', 'status', 'liqpay_data', 'server_data', 'ip'], 'safe'],
-            [['post_id', 'create_date'], 'integer'],
+            [['post_id', 'user_id', 'create_date'], 'integer'],
             [['amount', 'commission'], 'number'],
             [['liqpay_data', 'server_data'], 'string'],
             [['order_id'], 'string', 'max' => 11],
@@ -59,6 +60,7 @@ class Transaction extends \yii\db\ActiveRecord
             'id' => Yii::t('yee/transaction', 'ID'),
             'post_id' => Yii::t('yee/transaction', 'Post ID'),
             'order_id' => Yii::t('yee/transaction', 'Order ID'),
+            'user_id' => Yii::t('yee/transaction', 'User ID'),
             'amount' => Yii::t('yee/transaction', 'Amount'),
             'currency' => Yii::t('yee/transaction', 'Currency'),
             'commission' => Yii::t('yee/transaction', 'Commission'),
