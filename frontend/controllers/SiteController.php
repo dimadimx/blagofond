@@ -7,11 +7,11 @@ use frontend\actions\PostAction;
 use frontend\models\ContactForm;
 use frontend\models\HomeSlide;
 use backend\models\CustomPost;
+use backend\models\Transaction;
 use yeesoft\page\models\Page;
 use Yii;
 use yii\data\Pagination;
-
-use yii\base\InvalidParamException;
+use yii\web\NotFoundHttpException;
 use yii\web\BadRequestHttpException;
 /**
  * Site controller
@@ -45,7 +45,7 @@ class SiteController extends \yeesoft\controllers\BaseController
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
-            'result' => [
+            'callback' => [
                 'class' => 'voskobovich\liqpay\actions\CallbackAction',
                 'callable' => 'payment',
             ]
@@ -214,9 +214,6 @@ class SiteController extends \yeesoft\controllers\BaseController
         ]);
     }
 
-    /**
-     * @return Action
-     */
     public function actionSendPayment()
     {
         $request = Yii::$app->request;
@@ -226,68 +223,52 @@ class SiteController extends \yeesoft\controllers\BaseController
             $donatePost = CustomPost::findOne(['id' => $request->post('order_id'), 'status' => CustomPost::STATUS_PUBLISHED]);
 
             if ($donatePost) {
-                $product_url = $donatePost->slug;
-                return $this->render('payment', [
+                $date = strtotime('now');
+                $transactionModel = new Transaction();
+                $loadData = [
+                    'post_id' => $request->post('order_id'),
                     'amount' => $request->post('amount'),
-                    'order_id' => $request->post('order_id').'_'.strtotime('now'),
                     'currency' => 'UAH',
-                    'type' => 'donate',
-                    'language' => Yii::$app->yee->getDisplayLanguageShortcode(Yii::$app->language),
-                    'description' => $donatePost->title,
-                    'product_url' => $donatePost->slug,
-                    'server_url' => 'callback',
-                    'result_url' => 'thanks',
-                ]);
+                    'create_date' => $date,
+                ];
+                if ($transactionModel->load($loadData) and $transactionModel->validate()) {
+                    $transactionModel->save(false);
+                    return $this->render('payment', [
+                        'amount' => $request->post('amount'),
+                        'order_id' => "{$transactionModel->id}",
+                        'currency' => 'UAH',
+                        'type' => 'donate',
+                        'language' => Yii::$app->yee->getDisplayLanguageShortcode(Yii::$app->language),
+                        'description' => $donatePost->title,
+                        'product_url' => $donatePost->slug,
+                        'server_url' => 'callback',
+                        'result_url' => 'thanks',
+                    ]);
+                }
             }
         }
 
         $this->redirect($product_url);
     }
 
-    /**
-     * @return Action
-     */
-    function actionPayment($model)
+
+    protected function actionPayment($model)
     {
-//        $orderModel = yii::$app->orderModel;
-//        $orderModel = $orderModel::findOne($model->order_id);
-//        if(!$orderModel) {
-//            throw new NotFoundHttpException('The requested order does not exist.');
-//        }
-//        $orderModel->setPaymentStatus('yes');
-//        $orderModel->save(false);
-        Yii::info('yes', 'dimx');
-        return 'YES';
+        $this->layout = false;
+        $transactionModel = Transaction::findOne($model->order_id);
+        if(!$transactionModel) {
+            throw new NotFoundHttpException('The requested order does not exist.');
+        }
+        $transactionModel->amount = $model->amount;
+        $transactionModel->currency = $model->currency;
+        $transactionModel->type = $model->type;
+        $transactionModel->status = $model->status;
+        $transactionModel->server_data = json_encode($model);
+
+        $transactionModel->save(false);
+        Yii::$app->end();
     }
 
-    /**
-     * @return Action
-     */
-    public function actionCallback()
-    {
-        $post = Yii::$app->request->post();
-        Yii::info($post, 'dimx');
-
-        if (empty($post['data']) || empty($post['signature'])) {
-            throw new BadRequestHttpException();
-        }
-
-        $liqPay = Yii::$app->get('liqpay');
-        $sign = base64_encode(sha1($liqPay->private_key . $post['data'] . $liqPay->private_key, 1));
-
-        $model = new \voskobovich\liqpay\forms\CallbackForm();
-        $data = json_decode(base64_decode($post['data']), true);
-        $model->load($data, '');
-        if (!$model->validate() || $sign !== $post['signature']) {
-            throw new BadRequestHttpException('Data is corrupted');
-        }
-
-        call_user_func($this->callable, $model);
-    }
-
-    /**
-     * @return Action
-     */
     public function actionThanks()
     {
         $request = Yii::$app->request;
@@ -297,6 +278,17 @@ class SiteController extends \yeesoft\controllers\BaseController
         }
 
         $callbackData = json_decode(base64_decode($request->post('data')), true);
+
+        $loadData['Transaction'] = $callbackData;
+        $loadData['Transaction']['commission'] = ($callbackData['sender_commission'] + $callbackData['receiver_commission'] + $callbackData['agent_commission']);
+        $loadData['Transaction']['liqpay_data'] = json_encode($callbackData);
+
+        $transactionModel = Transaction::findOne($callbackData['order_id']);
+
+        if ($transactionModel->load($loadData)) {
+            $transactionModel->save();
+        }
+
         Yii::$app->session->setFlash('apiMessage', 'Your payment is '.$callbackData['status']);
 
         $this->redirect($callbackData['product_url']);
