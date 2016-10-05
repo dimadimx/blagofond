@@ -38,8 +38,8 @@ class Transaction extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['post_id', 'order_id', 'amount', 'currency'], 'required'],
-            [['commission', 'type', 'action', 'status', 'liqpay_data', 'server_data', 'ip'], 'safe'],
+            [['post_id', 'amount', 'currency'], 'required'],
+            [['order_id', 'commission', 'type', 'action', 'status', 'liqpay_data', 'server_data', 'ip'], 'safe'],
             [['post_id', 'user_id', 'create_date'], 'integer'],
             [['amount', 'commission'], 'number'],
             [['liqpay_data', 'server_data'], 'string'],

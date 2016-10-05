@@ -225,14 +225,14 @@ class SiteController extends \yeesoft\controllers\BaseController
             if ($donatePost) {
                 $date = strtotime('now');
                 $transactionModel = new Transaction();
-                $loadData = [
+                $loadData['Transaction'] = [
                     'post_id' => $request->post('order_id'),
                     'amount' => $request->post('amount'),
                     'currency' => 'UAH',
                     'create_date' => $date,
                 ];
                 if (!Yii::$app->user->isGuest)
-                    $loadData['user_id'] = Yii::$app->user->id;
+                    $loadData['Transaction']['user_id'] = Yii::$app->user->id;
                 if ($transactionModel->load($loadData) and $transactionModel->validate()) {
                     $transactionModel->save(false);
                     return $this->render('payment', [
