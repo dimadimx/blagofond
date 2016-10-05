@@ -190,6 +190,7 @@ h1{
 
 .currentLang + div span{
     display: block;
+    text-align: left;
     padding: 3px;
     cursor: pointer;
     padding-left: 30px;
@@ -991,6 +992,24 @@ span[data-lang="en"]{
     margin-bottom: 15px;
 }
 /* end fixedButtonsContent */
+
 .auth-clients {
     line-height: 24px;
+}
+
+@media screen and (min-width: 992px){
+    html{
+        height: 100%;
+    }
+    body{
+        min-height: 100%;
+        position: relative;
+        padding-bottom: 180px;
+    }
+
+    .footer{
+        width: 100%;
+        left: 0;
+        bottom: 0;
+    }
 }
