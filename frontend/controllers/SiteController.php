@@ -254,7 +254,7 @@ class SiteController extends \yeesoft\controllers\BaseController
     }
 
 
-    protected function actionPayment($model)
+    function actionPayment($model)
     {
         $this->layout = false;
         $transactionModel = Transaction::findOne($model->order_id);
