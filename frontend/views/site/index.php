@@ -30,7 +30,7 @@ $this->title = 'Homepage';
     <div class="container">
         <div class="row">
             <div class="col-xs-12 text-center">
-                <h2>Кампанії, які майже заповнились</h2>
+                <h2><?php echo Yii::t('yee/site', 'The campaign, which almost filled') ?></h2>
             </div>
         </div>
         <div class="row">
@@ -42,7 +42,7 @@ $this->title = 'Homepage';
                 </div>
                 <div class="row">
                     <div class="col-xs-12 text-center allList">
-                        <a href="<?php echo Url::to(['almost-finish-company'])?>" class="btn2 bg-red">ВЕСЬ СПИСОК</a>
+                        <a href="<?php echo Url::to(['almost-finish-company'])?>" class="btn2 bg-red"><?php echo Yii::t('yee/site', 'ALL LIST') ?></a>
                     </div>
                 </div>
             </div>
@@ -56,7 +56,7 @@ $this->title = 'Homepage';
     <div class="container">
         <div class="row">
             <div class="col-xs-12 text-center">
-                <h2>Нещодавно створенні кампанії</h2>
+                <h2><?php echo Yii::t('yee/site', 'Recently creating a campaign') ?></h2>
             </div>
         </div>
         <div class="row">
@@ -68,7 +68,7 @@ $this->title = 'Homepage';
                 </div>
                 <div class="row">
                     <div class="col-xs-12 text-center allList">
-                        <a href="<?php echo Url::to(['new-company'])?>" class="btn2 bg-red">ВЕСЬ СПИСОК</a>
+                        <a href="<?php echo Url::to(['new-company'])?>" class="btn2 bg-red"><?php echo Yii::t('yee/site', 'ALL LIST') ?></a>
                     </div>
                 </div>
             </div>
@@ -76,19 +76,3 @@ $this->title = 'Homepage';
     </div>
 </div>
 <!--# end content-block #-->
-
-<!--<div class="site-index">-->
-<!---->
-<!--    <div class="body-content">-->
-<!---->
-<!--        --><?php ///* @var $post yeesoft\post\models\Post */ ?>
-<!--        --><?php //foreach ($posts as $post) : ?>
-                <?php //= $this->render('/items/post.php', ['post' => $post, 'page' => 'index']) ?>
-<!--        --><?php //endforeach; ?>
-<!---->
-<!--        <div class="text-center">-->
-                <?php //= LinkPager::widget(['pagination' => $pagination]) ?>
-<!--        </div>-->
-<!---->
-<!--    </div>-->
-<!--</div>-->
