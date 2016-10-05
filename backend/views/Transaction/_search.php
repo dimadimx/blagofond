@@ -21,8 +21,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'user_id') ?>
 
-    <?= $form->field($model, 'order_id') ?>
-
     <?= $form->field($model, 'amount') ?>
 
     <?php // echo $form->field($model, 'currency') ?>

@@ -95,6 +95,19 @@ class CustomPost extends \yeesoft\post\models\Post implements OwnerAccess
     {
         return $this->hasMany(Images::className(), ['post_id' => 'id']);
     }
+
+    public function getTransaction()
+    {
+        return $this->hasMany(Transaction::className(), ['post_id' => 'id']);
+    }
+
+    public function getPaymentSum()
+    {
+        return $this
+            ->hasMany(Transaction::className(), ['post_id' => 'id'])
+            ->where(['not in', 'status', ['','invoice_wait']])
+            ->sum('amount');
+    }
     /**
      * Handle save tags event of the owner.
      */

@@ -6,6 +6,8 @@ use yii\helpers\Html;
 /* @var $post yeesoft\post\models\Post */
 
 $page = (isset($page)) ? $page : 'post';
+$getSum = (($post->paymentSum) ? $post->paymentSum : 0);
+$percent = ($getSum and (int)$post->volunteer->price) ? ($getSum / $post->volunteer->price) : (($getSum and !(int)$post->volunteer->price) ? $getSum : 0);
 ?>
 <!--# campaign #-->
 <div class="col-md-3 col-sm-6 col-xxs-12 campaignBlockW">
@@ -22,14 +24,14 @@ $page = (isset($page)) ? $page : 'post';
             <input type="submit" value="Надіслати" class="btn2 bg-green" />
         </form>
         <div class="progressBlock">
-            <div class="procent">88%</div>
+            <div class="procent"><?php echo Yii::$app->formatter->asPercent($percent, 2)?></div>
             <div class="moneyStage">
-                <span class="moneyGet">50</span>
+                <span class="moneyGet"><?php echo $getSum?></span>
                 <span class="moneyGoal"><?php echo $post->volunteer->price ?></span>
             </div>
         </div>
         <div class="progressBar">
-            <div style="width:88%"></div>
+            <div style="width:<?php echo (($percent > 1) ? '100%' : Yii::$app->formatter->asPercent($percent, 2))?>"></div>
         </div>
     </div>
 </div>

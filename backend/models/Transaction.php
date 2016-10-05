@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use yeesoft\components\User;
 use Yii;
 
 /**
@@ -10,7 +11,6 @@ use Yii;
  * @property integer $id
  * @property integer $post_id
  * @property integer $user_id
- * @property string $order_id
  * @property string $amount
  * @property string $currency
  * @property string $commission
@@ -39,11 +39,10 @@ class Transaction extends \yii\db\ActiveRecord
     {
         return [
             [['post_id', 'amount', 'currency'], 'required'],
-            [['order_id', 'commission', 'type', 'action', 'status', 'liqpay_data', 'server_data', 'ip'], 'safe'],
+            [['commission', 'type', 'action', 'status', 'liqpay_data', 'server_data', 'ip'], 'safe'],
             [['post_id', 'user_id', 'create_date'], 'integer'],
             [['amount', 'commission'], 'number'],
             [['liqpay_data', 'server_data'], 'string'],
-            [['order_id'], 'string', 'max' => 11],
             [['currency'], 'string', 'max' => 5],
             [['type'], 'string', 'max' => 20],
             [['action', 'status'], 'string', 'max' => 50],
@@ -59,7 +58,6 @@ class Transaction extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('yee/transaction', 'ID'),
             'post_id' => Yii::t('yee/transaction', 'Post ID'),
-            'order_id' => Yii::t('yee/transaction', 'Order ID'),
             'user_id' => Yii::t('yee/transaction', 'User ID'),
             'amount' => Yii::t('yee/transaction', 'Amount'),
             'currency' => Yii::t('yee/transaction', 'Currency'),
@@ -73,4 +71,21 @@ class Transaction extends \yii\db\ActiveRecord
             'create_date' => Yii::t('yee/transaction', 'Create Date'),
         ];
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCustomPost()
+    {
+        return $this->hasOne(CustomPost::className(), ['id' => 'post_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['user_id' => 'id']);
+    }
+
 }

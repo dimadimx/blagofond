@@ -281,7 +281,7 @@ class SiteController extends \yeesoft\controllers\BaseController
         $callbackData = json_decode(base64_decode($request->post('data')), true);
 
         $loadData['Transaction'] = $callbackData;
-        $loadData['Transaction']['commission'] = ($callbackData['sender_commission'] + $callbackData['receiver_commission'] + $callbackData['agent_commission']);
+        $loadData['Transaction']['commission'] = (!empty($callbackData['sender_commission'])) ? ($callbackData['sender_commission'] + $callbackData['receiver_commission'] + $callbackData['agent_commission']) : 0;
         $loadData['Transaction']['liqpay_data'] = json_encode($callbackData);
 
         $transactionModel = Transaction::findOne($callbackData['order_id']);

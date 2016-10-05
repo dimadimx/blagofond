@@ -7,10 +7,11 @@ use \backend\models\Images;
 /* @var $post yeesoft\post\models\Post */
 
 $page = (isset($page)) ? $page : 'post';
-?>
-<?php
-    $volunteer = $post->volunteer;
-    $images = $post->images;
+
+$volunteer = $post->volunteer;
+$images = $post->images;
+$getSum = (($post->paymentSum) ? $post->paymentSum : 0);
+$percent = ($getSum and (int)$volunteer->price) ? ($getSum / $volunteer->price) : (($getSum and !(int)$volunteer->price) ? $getSum : 0);
 ?>
 <?php if (Yii::$app->session->hasFlash('apiMessage')): ?>
     <div class="alert alert-success alert-dismissible alert-crud" role="alert">
@@ -57,10 +58,10 @@ $page = (isset($page)) ? $page : 'post';
                         </div>
 
                         <div class="detailsProgress">
-                            <div class="progressWidth" style="width: 88%;"></div>
-                            <div class="procent">88%</div>
+                            <div class="progressWidth" style="width: <?php echo (($percent > 1) ? '100%' : Yii::$app->formatter->asPercent($percent, 2))?>;"></div>
+                            <div class="procent"><?php echo Yii::$app->formatter->asPercent($percent, 2)?></div>
                             <div class="moneyStage">
-                                <span class="moneyGet">40</span>
+                                <span class="moneyGet"><?php echo $getSum?></span>
                                 <span class="moneyGoal"><?= $volunteer->price ?></span>
                             </div>
                         </div>

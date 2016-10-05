@@ -19,7 +19,7 @@ class TransactionSearch extends Transaction
     {
         return [
             [['id', 'post_id', 'user_id', 'create_date'], 'integer'],
-            [['order_id', 'currency', 'type', 'action', 'status', 'liqpay_data', 'server_data', 'ip'], 'safe'],
+            [['currency', 'type', 'action', 'status', 'liqpay_data', 'server_data', 'ip'], 'safe'],
             [['amount', 'commission'], 'number'],
         ];
     }
@@ -68,8 +68,7 @@ class TransactionSearch extends Transaction
             'create_date' => $this->create_date,
         ]);
 
-        $query->andFilterWhere(['like', 'order_id', $this->order_id])
-            ->andFilterWhere(['like', 'currency', $this->currency])
+        $query->andFilterWhere(['like', 'currency', $this->currency])
             ->andFilterWhere(['like', 'type', $this->type])
             ->andFilterWhere(['like', 'action', $this->action])
             ->andFilterWhere(['like', 'status', $this->status])
