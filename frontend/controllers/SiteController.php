@@ -47,7 +47,7 @@ class SiteController extends \yeesoft\controllers\BaseController
             ],
             'callback' => [
                 'class' => 'voskobovich\liqpay\actions\CallbackAction',
-                'callable' => 'payment',
+                'callable' => 'frontend\controllers\SiteController::actionPayment',
             ]
         ];
     }
@@ -254,9 +254,8 @@ class SiteController extends \yeesoft\controllers\BaseController
     }
 
 
-    function actionPayment($model)
+    public function actionPayment($model)
     {
-        $this->layout = false;
         $transactionModel = Transaction::findOne($model->order_id);
         if(!$transactionModel) {
             throw new NotFoundHttpException('The requested order does not exist.');
